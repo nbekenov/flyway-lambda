@@ -35,6 +35,9 @@ bin/
 /nbdist/
 /.nb-gradle/
 
+# docker volumes
+local-data
+
 ### VS Code ###
 .vscode/
 

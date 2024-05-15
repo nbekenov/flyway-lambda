@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+    volumes:
+      - ./local-data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d # init scripts are executed upon DB container startup
+    ports:
+      - 5432:5432
+  
+  flyway:
+    image: flyway/flyway
+    depends_on:
+      - db 
+    volumes:
+      - ../src/main/resources/db/migration:/flyway/sql
+    command: -url=jdbc:postgresql://db:5432/postgres -schemas=myschema -user=postgres -password=mysecretpassword -connectRetries=60 migrate
+
+  pg_admin:
+    image: dpage/pgadmin4
+    depends_on:
+      - db 
+    env_file:
+      - .env.pg_admin
+    ports:
+      - 80:80
+
+volumes:
+  local-data:
+    external: false
