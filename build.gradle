@@ -1,17 +1,30 @@
 plugins {
     id 'java'
+    id 'groovy'
+    id 'application'
 }
 
 group = 'org.example'
 version = '1.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    implementation 'org.flywaydb:flyway-core:9.22.3'
+    implementation 'org.postgresql:postgresql:42.7.2'
+
+    implementation 'software.amazon.jdbc:aws-advanced-jdbc-wrapper:2.3.0'
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+application {
+    mainClass = 'com.example.DatabaseMigrationHandler'
 }
 
 test {
